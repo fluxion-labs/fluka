@@ -63,7 +63,7 @@ export function EVMProvider({ children }: PropsWithChildren) {
   )
   const { connectors } = getDefaultWallets({
     appName: 'Laika',
-    projectId: import.meta.env.VITE_PROJECT_ID ?? 'YOUR_PROJECT_ID',
+    projectId: import.meta.env.VITE_PROJECT_ID ?? 'FLUKA',
     chains,
   })
 
@@ -80,6 +80,8 @@ export function EVMProvider({ children }: PropsWithChildren) {
       return lightTheme()
     }
   }, [resolvedTheme])
+
+  console.log("DEBUG - WAGMI CONFIG:", wagmiConfig)
 
   return (
     <WagmiConfig config={wagmiConfig}>
