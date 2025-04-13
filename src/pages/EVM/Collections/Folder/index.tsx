@@ -15,12 +15,13 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { EVMCollection, EVMFolder, EVMItemType, useEVMCollectionStore } from '@/store/collections'
+import { EVMCollection, EVMFolder, EVMItemType, parseEVMContract, useEVMCollectionStore } from '@/store/collections'
 import { useEVMTabStore } from '@/store/tabs'
 import { isFolderHaveItemsMatchSearchText } from '@/utils/collections'
 
 import Rename from './Rename'
 import SmartContract from './SmartContract'
+import { toast } from '@/components/ui/use-toast'
 
 interface CollectionProps {
   folder: EVMCollection | EVMFolder
@@ -38,6 +39,28 @@ export default function Folder({ folder, level = 0, search }: CollectionProps) {
   const handleToggleOpen = () => {
     if (isRenaming) return
     toggleOpen(folder.id)
+  }
+
+  const handleImportSmartContract = () => {
+    navigator.clipboard.readText().then((text) => {
+      console.log("DEBUG - read from clipboard:", text)
+      try {
+        const ctx = parseEVMContract(JSON.parse(text) as unknown)
+        addSmartContract(folder.id, (smartContract) => {
+          smartContract.chainId = ctx.chainId
+          smartContract.contract.address = ctx.contract.address
+          smartContract.contract.abi = ctx.contract.abi
+
+          addTab(smartContract.id)
+          setActiveTab(smartContract.id)
+        })
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'Import smart contract failed',
+        })
+      }
+    })
   }
 
   const handleAddSmartContract = () => {
@@ -99,6 +122,7 @@ export default function Folder({ folder, level = 0, search }: CollectionProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+              <DropdownMenuItem onClick={handleImportSmartContract}>Load Clipboard</DropdownMenuItem>
               <DropdownMenuItem onClick={handleAddSmartContract}>New Request</DropdownMenuItem>
               <DropdownMenuItem onClick={handleAddFolder}>New Folder</DropdownMenuItem>
               <DropdownMenuItem onClick={handleToggleRename}>Rename</DropdownMenuItem>

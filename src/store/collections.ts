@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -8,6 +9,23 @@ export enum EVMItemType {
   Collection = 'collection',
   SmartContract = 'smart-contract',
   Folder = 'folder',
+}
+
+export const EVMContractRequiredSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.literal(EVMItemType.SmartContract),
+  chainId: z.number(),
+  contract: z.object({
+    address: z.string(),
+    abi: z.string(),
+  }),
+});
+
+export type TEVMContract = z.infer<typeof EVMContractRequiredSchema>;
+
+export function parseEVMContract(input: unknown): TEVMContract {
+  return EVMContractRequiredSchema.parse(input);
 }
 
 export interface EVMContract {

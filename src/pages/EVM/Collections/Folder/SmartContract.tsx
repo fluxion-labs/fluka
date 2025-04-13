@@ -22,6 +22,7 @@ import { useEVMTabStore } from '@/store/tabs'
 import { isItemMatchSearchText } from '@/utils/collections'
 
 import Rename from './Rename'
+import { toast } from '@/components/ui/use-toast'
 
 interface SmartContractProps {
   parentId: string
@@ -40,6 +41,15 @@ export default function SmartContract({ smartContract, level, search, parentId }
   const handleOpen = () => {
     addTab(smartContract.id)
     setActiveTab(smartContract.id)
+  }
+
+  const handleExport = () => {
+    if (smartContract.contract.abi)
+      smartContract.contract.abi = JSON.stringify(JSON.parse(smartContract.contract.abi))
+    navigator.clipboard.writeText(JSON.stringify(smartContract, null, 2))
+    toast({
+      title: 'Copied to clipboard.',
+    })
   }
 
   const handleDuplicate = () => {
@@ -88,6 +98,7 @@ export default function SmartContract({ smartContract, level, search, parentId }
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleExport}>Export</DropdownMenuItem>
             <DropdownMenuItem onClick={handleToggleRename}>Rename</DropdownMenuItem>
             <DropdownMenuItem onClick={handleToggleDelete}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
