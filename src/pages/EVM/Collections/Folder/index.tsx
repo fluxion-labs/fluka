@@ -48,6 +48,7 @@ export default function Folder({ folder, level = 0, search }: CollectionProps) {
         const ctx = parseEVMContract(JSON.parse(text) as unknown)
         addSmartContract(folder.id, (smartContract) => {
           smartContract.chainId = ctx.chainId
+          smartContract.name = ctx.name + " (copy)"
           smartContract.contract.address = ctx.contract.address
           smartContract.contract.abi = ctx.contract.abi
 
