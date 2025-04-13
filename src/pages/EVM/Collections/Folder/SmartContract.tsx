@@ -24,21 +24,26 @@ import { isItemMatchSearchText } from '@/utils/collections'
 import Rename from './Rename'
 
 interface SmartContractProps {
+  parentId: string
   smartContract: EVMContract
   level: number
   search: string
 }
 
-export default function SmartContract({ smartContract, level, search }: SmartContractProps) {
+export default function SmartContract({ smartContract, level, search, parentId }: SmartContractProps) {
   const [isRenaming, setIsRenaming] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const { removeItem } = useEVMCollectionStore()
+  const { duplicateContract, removeItem } = useEVMCollectionStore()
   const { activeTabId, addTab, removeTab, setActiveTab } = useEVMTabStore()
 
   const handleOpen = () => {
     addTab(smartContract.id)
     setActiveTab(smartContract.id)
+  }
+
+  const handleDuplicate = () => {
+    duplicateContract(smartContract.id, parentId)
   }
 
   const handleToggleRename = debounce(() => {
@@ -82,6 +87,7 @@ export default function SmartContract({ smartContract, level, search }: SmartCon
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
             <DropdownMenuItem onClick={handleToggleRename}>Rename</DropdownMenuItem>
             <DropdownMenuItem onClick={handleToggleDelete}>Delete</DropdownMenuItem>
           </DropdownMenuContent>

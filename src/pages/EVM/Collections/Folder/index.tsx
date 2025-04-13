@@ -130,7 +130,7 @@ export default function Folder({ folder, level = 0, search }: CollectionProps) {
               if (item.type === EVMItemType.Folder) {
                 return <Folder key={item.id} folder={item} level={level + 1} search={search} />
               } else if (item.type === EVMItemType.SmartContract) {
-                return <SmartContract key={item.id} smartContract={item} level={level + 1} search={search} />
+                return <SmartContract key={item.id} parentId={folder.id} smartContract={item} level={level + 1} search={search} />
               }
               return null
             })}
