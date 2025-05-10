@@ -25,6 +25,11 @@ export default function ReadResponse({ response }: { response: Response }) {
           theme={resolvedTheme === 'light' ? 'chromeLight' : 'chromeDark'}
         />
       )}
+      {
+        !isLoading && response.error && (
+          <pre className="whitespace-pre">Error: {response.error.message}</pre>
+        )
+      }
     </div>
   )
 }

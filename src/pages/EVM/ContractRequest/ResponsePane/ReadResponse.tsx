@@ -9,7 +9,7 @@ export default function ReadResponse({ response }: { response: Response }) {
       <pre className="whitespace-pre">{response.result}</pre>
       {
         response.error && (
-          <pre className="whitespace-pre">{response.error.message}</pre>
+          <pre className="whitespace-pre">Error: {response.error.message}</pre>
         )
       }
     </div>
