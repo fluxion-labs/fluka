@@ -57,7 +57,13 @@ export default function WriteMethod({
   })
 
   const handleWriteClick = () => {
-    write()
+    const newArgs = [...args].map((arg, i) => {
+      if (abi.inputs[i].type.endsWith('[]')) {
+        return JSON.parse(arg)
+      }
+      return arg
+    })
+    write({ args: newArgs })
   }
 
   const handleSwitchNetwork = () => {
