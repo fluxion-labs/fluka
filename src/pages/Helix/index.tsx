@@ -25,7 +25,7 @@ export default function Helix() {
       <p className='text-2xl'>Helix Unallocated Fund Claiming</p>
       {
         Configs.map((cfg) => (
-          <div className='flex justify-between'>
+          <div key={cfg.title} className='flex justify-between'>
             <p className='text-lg'>{cfg.title}</p>
             <ClaimBtn chainId={cfg.chainId} contractAddress={cfg.contractAddress} endpoint={cfg.endpoint} nft={cfg.nft} address={cfg.address} />
           </div>
