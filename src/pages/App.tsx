@@ -6,12 +6,18 @@ import { Toaster } from '@/components/ui/toaster'
 
 import EVM from './EVM'
 import Root from './Root'
+import Helix from './Helix'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
     children: [{ index: true, element: <EVM /> }],
+  },
+  {
+    path: '/helix',
+    element: <Root />,
+    children: [{ index: true, element: <Helix /> }],
   },
 ])
 
