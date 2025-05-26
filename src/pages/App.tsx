@@ -12,12 +12,14 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    children: [{ index: true, element: <EVM /> }],
-  },
-  {
-    path: '/helix',
-    element: <Root />,
-    children: [{ index: true, element: <Helix /> }],
+    children: [
+      { index: true, element: <EVM /> },
+      {
+        path: 'helix',
+        element: <Root />,
+        children: [{ index: true, element: <Helix /> }],
+      },
+    ],
   },
 ])
 
