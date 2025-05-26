@@ -1,17 +1,14 @@
 import { useMemo } from 'react'
-import { Address } from 'viem'
 
-import { EVMABIMethod, EVMContract } from '@/store/collections'
+import { EVMContract } from '@/store/collections'
 
 import ReadMethod from './ReadMethod'
+import { parseSc } from '@/utils/abi'
 
 export default function ReadTab({ smartContract }: { smartContract: EVMContract }) {
   const readableMethods = useMemo(() => {
-    const address = smartContract.contract?.address as Address
-    const methods: EVMABIMethod[] = smartContract.contract?.abi && JSON.parse(smartContract.contract.abi)
-    if (!address || !methods) {
-      return []
-    }
+    const [address, methods] = parseSc(smartContract);
+
     const infoMethods = methods.filter(
       (method) => method.inputs?.length > 0 && (method.stateMutability === 'view' || method.stateMutability === 'pure'),
     )

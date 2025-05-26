@@ -1,17 +1,14 @@
 import { useMemo } from 'react'
-import { Address } from 'viem'
 
-import { EVMABIMethod, EVMContract } from '@/store/collections'
+import { EVMContract } from '@/store/collections'
 
 import WriteMethod from './WriteMethod'
+import { parseSc } from '@/utils/abi'
 
 export default function WriteTab({ smartContract }: { smartContract: EVMContract }) {
   const writeableMethods = useMemo(() => {
-    const address = smartContract.contract?.address as Address
-    const methods: EVMABIMethod[] = smartContract.contract?.abi && JSON.parse(smartContract.contract.abi)
-    if (!address || !methods) {
-      return []
-    }
+    const [address, methods] = parseSc(smartContract);
+
     const filteredMethods = methods.filter(
       (method) => method.stateMutability !== 'view' && method.stateMutability !== 'pure' && method.type === 'function',
     )

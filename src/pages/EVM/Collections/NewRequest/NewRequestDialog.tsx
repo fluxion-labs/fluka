@@ -39,11 +39,18 @@ const FormSchema = z.object({
           return true
         }
         try {
-          formatAbi(JSON.parse(abi))
+          let parsedAbi = JSON.parse(abi)
+          if (!Array.isArray(parsedAbi)) {
+            parsedAbi = parsedAbi.output?.abi
+          }
+          if (Array.isArray(parsedAbi) && parsedAbi.length > 0) {
+            formatAbi(parsedAbi)
+            return true
+          }
+          throw new Error("Invalid ABI")
         } catch {
           return false
         }
-        return true
       },
       {
         message: 'Invalid ABI',

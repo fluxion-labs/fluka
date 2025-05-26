@@ -1,22 +1,20 @@
 import { useEffect, useMemo } from 'react'
-import { Abi, Address } from 'viem'
+import { Abi } from 'viem'
 import { useContractReads } from 'wagmi'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCaption, TableCell, TableRow } from '@/components/ui/table'
 import { useToast } from '@/components/ui/use-toast'
-import { EVMABIMethod, EVMContract } from '@/store/collections'
+import { EVMContract } from '@/store/collections'
+import { parseSc } from '@/utils/abi'
 
 export default function StateTab({ smartContract }: { smartContract: EVMContract }) {
   const { toast } = useToast()
 
   const prefetchableMethods = useMemo(() => {
-    const address = smartContract.contract?.address as Address
-    const methods: EVMABIMethod[] = smartContract.contract?.abi && JSON.parse(smartContract.contract.abi)
-    if (!address || !methods) {
-      return []
-    }
+    const [address, methods] = parseSc(smartContract);
+
     const filteredMethods = methods.filter(
       (method) =>
         method.inputs?.length === 0 && (method.stateMutability === 'view' || method.stateMutability === 'pure'),
