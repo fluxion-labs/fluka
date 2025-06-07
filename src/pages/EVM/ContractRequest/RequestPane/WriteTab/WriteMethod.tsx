@@ -69,6 +69,8 @@ export default function WriteMethod({
 
   const handleSwitchNetwork = () => {
     switchNetwork?.(chainId)
+  }
+
   const handleParserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("DEBUG - Parser Change:", event.target.value)
     console.log("DEBUG - ABI:", abi)
