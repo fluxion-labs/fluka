@@ -2,6 +2,7 @@ import { Send } from 'lucide-react'
 import { useState } from 'react'
 import { Address } from 'viem'
 import { mainnet, useContractWrite, useSwitchNetwork } from 'wagmi'
+import { Interface } from 'ethers'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -68,6 +69,21 @@ export default function WriteMethod({
 
   const handleSwitchNetwork = () => {
     switchNetwork?.(chainId)
+  const handleParserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("DEBUG - Parser Change:", event.target.value)
+    console.log("DEBUG - ABI:", abi)
+    const args = new Interface([abi]).decodeFunctionData(abi.name, event.target.value)
+    setArgs(args.map((arg, idx) => {
+      if (abi.inputs[idx].type === "tuple") {
+        const tuple = {}
+        arg.forEach((field, tupleIdx) => {
+          tuple[abi.inputs[idx].components[tupleIdx].name] = field.toString()
+          console.log("DEBUG - Tuple:", abi.inputs[idx].components[tupleIdx].name, field)
+        })
+        return JSON.stringify(tuple)
+      }
+      return arg
+    }))
   }
 
   return (
@@ -76,6 +92,15 @@ export default function WriteMethod({
         <CardTitle>{functionName}</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
+        <div className="grid items-center w-full gap-4">
+          <div>
+            <Label>Parser</Label>
+            <Input
+              placeholder={'0x...'}
+              onChange={handleParserChange}
+            />
+          </div>
+        </div>
         <form>
           <div className="grid items-center w-full gap-4">
             {abi &&

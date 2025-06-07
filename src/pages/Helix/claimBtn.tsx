@@ -77,6 +77,8 @@ export default function ClaimBtn({ contractAddress, endpoint, chainId, nft, addr
       signature: { v, s, r },
     } = rewardRes.data
 
+    console.log("BALANCE:", amounts.map((amount: string) => Number(amount) / 10 ** 18));
+
     write({
       args: [nft, tokens, address, amounts, deadline, nonce, v, r, s],
     })
