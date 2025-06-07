@@ -77,10 +77,17 @@ export default function WriteMethod({
     const args = new Interface([abi]).decodeFunctionData(abi.name, event.target.value)
     setArgs(args.map((arg, idx) => {
       if (abi.inputs[idx].type === "tuple") {
-        const tuple = {}
-        arg.forEach((field, tupleIdx) => {
-          tuple[abi.inputs[idx].components[tupleIdx].name] = field.toString()
-          console.log("DEBUG - Tuple:", abi.inputs[idx].components[tupleIdx].name, field)
+        const tuple: Record<string, string> = {};
+        arg.forEach((field: any, tupleIdx: number) => {
+          const component = abi.inputs[idx].components?.[tupleIdx];
+          if (component) {
+            tuple[component.name] = field.toString()
+            console.log("DEBUG - Tuple:", component.name, field)
+          }
+          else {
+            console.warn("DEBUG - Missing component for tuple index:", tupleIdx);
+
+          }
         })
         return JSON.stringify(tuple)
       }
