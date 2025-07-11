@@ -46,7 +46,7 @@ export default function Collections() {
       <Allotment.Pane className="py-1">
         <div className="h-full overflow-y-auto">
           {collections.length > 0 ? (
-            collections.map((collection) => {
+            collections.sort((a, b) => a.name.localeCompare(b.name)).map((collection) => {
               return <Folder key={collection.id} folder={collection} search={search} />
             })
           ) : (

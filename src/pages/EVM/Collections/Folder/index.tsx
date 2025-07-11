@@ -148,8 +148,10 @@ export default function Folder({ folder, level = 0, search }: CollectionProps) {
             </div>
           )}
           {folder.items
-            .sort((a) => {
-              return a.type === EVMItemType.Folder ? -1 : 1
+            .sort((a, b) => {
+              if (a.type === EVMItemType.Folder && b.type !== EVMItemType.Folder) return -1;
+              if (a.type !== EVMItemType.Folder && b.type === EVMItemType.Folder) return 1;
+              return a.name.localeCompare(b.name);
             })
             .map((item) => {
               if (item.type === EVMItemType.Folder) {
