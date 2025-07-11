@@ -81,7 +81,7 @@ export default function SmartContract({ smartContract, level, search, parentId }
       ))}
       <div className="flex flex-1 px-2 truncate">
         <div className="flex items-center justify-center flex-1 min-w-0 gap-2 cursor-pointer" onClick={handleOpen}>
-          <Badge className="p-0.5">Contract</Badge>
+          <Badge className="p-0.5">ctx</Badge>
           <div className="flex flex-1 truncate select-none">
             {isRenaming ? (
               <Rename id={smartContract.id} itemName={smartContract.name} onSave={handleToggleRename} />
